@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+    <globalConfiguration>
+        <parameter name="sendMultiRefs" value="true"/>
+        <parameter name="disablePrettyXML" value="false"/>
+        <parameter name="adminPassword" value="admin"/>
+        <parameter name="attachments.Directory" value=".\attachments"/>
+        <parameter name="dotNetSoapEncFix" value="true"/>
+        <parameter name="enableNamespacePrefixOptimization" value="true"/>
+        <parameter name="sendXMLDeclaration" value="true"/>
+        <parameter name="sendXsiTypes" value="true"/>
+        <parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+
+
+        <requestFlow>
+            <handler type="java:com.billcom.dealerhandling.commons.exception.SoapFaultHandler"/>
+            <handler type="java:com.billcom.connectionpools.handlers.UsernameTokenRequestHandler"/>
+        </requestFlow>
+
+    </globalConfiguration>
+
+    <handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+    <handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+    <handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+    <handler name="auth" type="java:com.billcom.connectionpools.handlers.UsernameTokenRequestHandler"/>
+    <service name="AdminService" provider="java:MSG">
+        <parameter name="allowedMethods" value="AdminService"/>
+        <parameter name="enableRemoteAdmin" value="false"/>
+        <parameter name="className" value="org.apache.axis.utils.Admin"/>
+        <namespace>http://xml.apache.org/axis/wsdd/</namespace>
+    </service>
+    <service name="Version" provider="java:RPC">
+        <parameter name="allowedMethods" value="getVersion"/>
+        <parameter name="className" value="org.apache.axis.Version"/>
+    </service>
+    <service name="DealerHandling" provider="java:RPC" style="document" use="literal">
+
+        <parameter name="wsdlTargetNamespace" value="http://alu.services.ws.lhs.com"/>
+        <parameter name="wsdlServiceElement" value="DealerHandlingService"/>
+        <parameter name="schemaQualified" value="http://alu.services.ws.lhs.com"/>
+        <parameter name="wsdlServicePort" value="DealerHandling"/>
+        <parameter name="className" value="com.billcom.dealerhandling.soap.DealerHandling"/>
+        <parameter name="wsdlPortType" value="DealerHandling"/>
+        <parameter name="typeMappingVersion" value="1.2"/>
+        <operation xmlns:retNS="http://alu.services.ws.lhs.com" xmlns:rtns="http://alu.services.ws.lhs.com" name="getPreactivatedContracts" qname="getPreactivatedContracts" returnQName="retNS:getPreactivatedContractsReturn" returnType="rtns:ContractListResponse" soapAction="">
+            <fault xmlns:fns="http://alu.services.ws.lhs.com" xmlns:axis="http://xml.apache.org/axis/wsdd/" class="com.alu.cms.util.UnexpectedError" name="UnexpectedError" qname="fns:UnexpectedErrorFault" type="fns:UnexpectedError"/>
+            <parameter xmlns:pns="http://alu.services.ws.lhs.com" xmlns:tns="http://alu.services.ws.lhs.com" qname="pns:getPreactivatedContractsRequest" type="tns:GetPreactivatedContractsRequest"/>
+        </operation>
+        <operation xmlns:retNS="http://alu.services.ws.lhs.com" xmlns:rtns="http://alu.services.ws.lhs.com" name="checkPreactivatedContract" qname="checkPreactivatedContract" returnQName="retNS:checkPreactivatedContractReturn" returnType="rtns:CheckPreactivatedContractResponse" soapAction="">
+            <fault xmlns:fns="http://alu.services.ws.lhs.com" xmlns:axis="http://xml.apache.org/axis/wsdd/" class="com.alu.cms.util.UnexpectedError" name="UnexpectedError" qname="fns:UnexpectedErrorFault" type="fns:UnexpectedError"/>
+            <parameter xmlns:pns="http://alu.services.ws.lhs.com" xmlns:tns="http://alu.services.ws.lhs.com" qname="pns:checkPreactivatedContractRequest" type="tns:CheckPreactivatedContractRequest"/>
+        </operation>
+        <parameter name="allowedMethods" value="checkPreactivatedContract getPreactivatedContracts"/>
+
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:ContractsSearchBeanOut" type="java:com.lhs.ws.beans.v2.ContractsSearchBeanOut" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:CheckPreactivatedContractResponse" type="java:com.billcom.dealerhandling.commons.beans.CheckPreactivatedContractResponse" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:ContractListResponse" type="java:com.billcom.dealerhandling.commons.beans.ContractListResponse" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <arrayMapping xmlns:ns="http://alu.services.ws.lhs.com" xmlns:cmp-ns="http://alu.services.ws.lhs.com" qname="ns:ArrayOfDirnumBlocksBeanOut" type="java:com.lhs.ws.beans.v2.contracts_search.contracts.DirnumBlocksBeanOut[]" innerType="cmp-ns:DirnumBlocksBeanOut" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:CheckPreactivatedContractRequest" type="java:com.billcom.dealerhandling.commons.beans.CheckPreactivatedContractRequest" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:DateBean" type="java:com.lhs.ws.beans.DateBean" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <arrayMapping xmlns:ns="http://alu.services.ws.lhs.com" xmlns:cmp-ns="http://alu.services.ws.lhs.com" qname="ns:ArrayOfContractsBeanOut" type="java:com.lhs.ws.beans.v2.contracts_search.ContractsBeanOut[]" innerType="cmp-ns:ContractsBeanOut" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:OperationResponse" type="java:com.billcom.dealerhandling.commons.beans.OperationResponse" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:DirnumBlocksBeanOut" type="java:com.lhs.ws.beans.v2.contracts_search.contracts.DirnumBlocksBeanOut" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:BaseSOIBean" type="java:com.lhs.ws.beans.BaseSOIBean" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:ContractsBeanOut" type="java:com.lhs.ws.beans.v2.contracts_search.ContractsBeanOut" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+        <typeMapping xmlns:ns="http://alu.services.ws.lhs.com" qname="ns:GetPreactivatedContractsRequest" type="java:com.billcom.dealerhandling.commons.beans.GetPreactivatedContractsRequest" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+    </service>
+    <!-- transport part -->
+    <transport name="http">
+        <requestFlow>
+
+            <handler type="URLMapper"/>
+            <handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+        </requestFlow>
+
+        <parameter name="qs:list" value="org.apache.axis.transport.http.QSListHandler"/>
+        <parameter name="qs.method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+        <parameter name="useDefaultQueryStrings" value="false"/>
+        <parameter name="qs.wsdl" value="com.billcom.dealerhandling.commons.exception.SoapFaultWsdlHandler"/>
+
+    </transport>
+    <transport name="local">
+        <responseFlow>
+            <handler type="LocalResponder"/>
+        </responseFlow>
+    </transport>
+
+</deployment>
