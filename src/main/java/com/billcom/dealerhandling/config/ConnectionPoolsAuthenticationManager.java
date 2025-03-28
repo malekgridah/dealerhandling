@@ -39,7 +39,7 @@ public class ConnectionPoolsAuthenticationManager implements AuthenticationManag
             return new UsernamePasswordAuthenticationToken(authentication.getName(),
                     authentication.getCredentials(), AUTHORITIES);
         } catch (Exception e) {
-            throw new BadCredentialsException("Bad Cqredentials");
+            throw new BadCredentialsException("Bad Credentials");
         }
     }
 
