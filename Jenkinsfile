@@ -8,15 +8,9 @@ pipeline {
         stage ('Initialize') {
             steps {
                 sh '''
-                    echo "PATH = ${PATH}"
-                    echo "M2_HOME = ${M2_HOME}"
+                    echo Hello
+                    echo test
                 '''
-            }
-        }
-
-        stage ('Build') {
-            steps {
-                sh 'mvn clean package'
             }
         }
     }
